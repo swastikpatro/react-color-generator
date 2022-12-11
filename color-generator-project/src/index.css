@@ -522,6 +522,7 @@ Color Generator
     gap: 0 1rem;
     margin-top: -0.75rem;
     border: 2px solid var(--black);
+    border-radius: var(--borderRadius);
   }
 
   .colors {
