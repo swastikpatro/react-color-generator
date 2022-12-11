@@ -1,46 +1,56 @@
-import React, { useReducer, useRef, useState } from 'react';
+import React, { useReducer } from 'react';
 import Values from 'values.js';
 import { FaRandom } from 'react-icons/fa';
 import { ImArrowRight } from 'react-icons/im';
 import getRandomColor from './getRandomHex';
-
-interface stateType {
-  colorInput: string;
-  shadeInput: number;
-}
-
-interface actionType {
-  targetName?: any;
-  type: string;
-  val?: number | string;
-}
+import SingleColor from './SingleColor';
+import { actionType, singleColorType, stateType } from './types';
 
 function reducer(state: stateType, action: actionType): any {
   if (action.type === 'CHANGE_INPUT') {
     return {
       ...state,
-      [action.targetName]: [action.val],
+      [action.targetName]: action.val,
+    };
+  }
+
+  if (action.type === 'SHOW_LIST') {
+    return {
+      ...state,
+      colorsList: action.nextList,
     };
   }
 }
 
 function App() {
   const DEFAULT_SHADE = 10;
+  const DEFAULT_COLOR = '#ffa500';
+  const DEFAULT_LIST_OF_COLORS = new Values(DEFAULT_COLOR).all(DEFAULT_SHADE);
+  // console.log('list', DEFAULT_LIST_OF_COLORS.length, DEFAULT_LIST_OF_COLORS);
   const defaultState = {
-    colorInput: '#ffa500',
+    colorInput: DEFAULT_COLOR,
     shadeInput: DEFAULT_SHADE,
+    colorsList: DEFAULT_LIST_OF_COLORS,
   };
   const [state, dispatch] = useReducer(reducer, defaultState);
   const handleSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
+    dispatch({
+      type: 'SHOW_LIST',
+      nextList: [...new Values(state.colorInput).all(state.shadeInput)],
+    });
   };
 
-  const handleRandomClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+  const handleRandomClick = (): void => {
     const randomColor: string = getRandomColor();
     dispatch({
       type: 'CHANGE_INPUT',
       targetName: 'colorInput',
       val: randomColor,
+    });
+    dispatch({
+      type: 'SHOW_LIST',
+      nextList: [...new Values(randomColor).all(state.shadeInput)],
     });
   };
 
@@ -53,7 +63,11 @@ function App() {
       return 1;
     }
 
-    return Number(val);
+    if (val > 100) {
+      return 100;
+    }
+
+    return Number(Number(val).toFixed(1));
   };
 
   return (
@@ -80,13 +94,14 @@ function App() {
               />
             </div>
             <div className='shade-count-div'>
-              <label htmlFor='shade-input'>No. of Shades : </label>
+              <label htmlFor='shade-input'>Shades : </label>
               <input
                 type='number'
                 name='shadeInput'
                 id='shade-input'
                 placeholder='10'
                 value={state.shadeInput}
+                step='any'
                 onChange={(e) => {
                   dispatch({
                     type: 'CHANGE_INPUT',
@@ -107,7 +122,11 @@ function App() {
         </button>
       </section>
 
-      <section className='colors'></section>
+      <section className='colors'>
+        {state.colorsList.map((color: singleColorType) => (
+          <SingleColor color={color} />
+        ))}
+      </section>
     </>
   );
 }

@@ -347,7 +347,7 @@ Color Generator
 
 #shade-input {
   width: 3.5rem;
-  height: 1.5rem;
+  height: 1.75rem;
   padding: 0.25rem;
   padding-right: 0;
 }
@@ -402,8 +402,94 @@ Color Generator
 
 .color {
   padding: 1rem 2rem;
+  padding: 3rem;
   font-size: 1rem;
   text-transform: none;
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding-top: 0.25rem;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  transition: var(--transition);
+  border-color: transparent;
+  cursor: pointer;
+}
+
+.icon-base {
+  background-image: linear-gradient(
+    to right,
+    hsl(307, 86%, 47%) 0%,
+    hsl(179, 100%, 48%) 51%,
+    hsl(307, 86%, 47%) 100%
+  );
+  text-align: center;
+  background-size: 200% auto;
+  color: var(--white);
+  display: block;
+  border: 2px solid var(--white);
+}
+
+.icon-base:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.icon-dark {
+  background: var(--white);
+  color: var(--black);
+}
+
+.icon-light {
+  background: var(--black);
+  color: var(--white);
+}
+
+.text-light {
+  color: var(--white);
+}
+.text-dark {
+  color: var(--dark);
+}
+
+.text-base {
+  outline: 2px solid var(--black);
+  outline-offset: -4px;
+  border: 2px solid var(--white);
+}
+
+.percent-value {
+  font-size: 0.75rem;
+  letter-spacing: var(--letterSpacing);
+  margin-bottom: 0.25rem;
+}
+
+.color-value {
+  font-size: 0.95rem;
+  letter-spacing: var(--letterSpacing);
+}
+
+.icon-dark:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+.icon-light:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+.shade-type {
+  text-transform: capitalize;
+  letter-spacing: var(--letterSpacing);
+  margin-bottom: 0.25rem;
 }
 
 @media screen and (min-width: 900px) {
