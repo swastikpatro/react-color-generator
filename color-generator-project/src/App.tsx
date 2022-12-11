@@ -144,7 +144,8 @@ function App() {
       <section className='container'>
         <form onSubmit={handleSubmit}>
           <h3>
-            Color Generator <img src='favicon-32x32.png' alt='color' />
+            Color Generator{' '}
+            <img src='./src/assets/favicon-32x32.png' alt='color' />
           </h3>
 
           <div className='search-form'>
