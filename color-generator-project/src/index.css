@@ -521,6 +521,7 @@ Color Generator
     width: fit-content;
     gap: 0 1rem;
     margin-top: -0.75rem;
+    border: 2px solid var(--black);
   }
 
   .colors {
