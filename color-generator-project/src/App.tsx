@@ -5,6 +5,58 @@ import { ImArrowRight } from 'react-icons/im';
 import getRandomColor from './getRandomHex';
 import SingleColor from './SingleColor';
 import { actionType, singleColorType, stateType } from './types';
+import toast, { Toaster } from 'react-hot-toast';
+
+const notify = (text = '', isSuccess = true) => {
+  if (isSuccess) {
+    const msg = `Generated ${text + ' '}Color!`;
+    toast.success(msg, {
+      duration: 750,
+      position: 'top-left',
+
+      style: {
+        background: '#222',
+        color: '#fff',
+        borderRadius: 'var(--borderRadius)',
+        letterSpacing: 'var(--letterSpacing)',
+      },
+
+      iconTheme: {
+        primary: '#19ff1d',
+        secondary: '#000',
+      },
+
+      // Aria
+      ariaProps: {
+        role: 'status',
+        'aria-live': 'polite',
+      },
+    });
+  } else {
+    toast.error(text, {
+      duration: 750,
+      position: 'top-left',
+
+      style: {
+        background: '#222',
+        color: '#fff',
+        borderRadius: 'var(--borderRadius)',
+        letterSpacing: 'var(--letterSpacing)',
+      },
+
+      iconTheme: {
+        primary: '#ff0000',
+        secondary: '#000',
+      },
+
+      // Aria
+      ariaProps: {
+        role: 'status',
+        'aria-live': 'polite',
+      },
+    });
+  }
+};
 
 function reducer(state: stateType, action: actionType): any {
   if (action.type === 'CHANGE_INPUT') {
@@ -22,6 +74,11 @@ function reducer(state: stateType, action: actionType): any {
   }
 }
 
+const prev = {
+  prevColorInput: '',
+  prevShadeInput: 0,
+};
+
 function App() {
   const DEFAULT_SHADE = 10;
   const DEFAULT_COLOR = '#ffa500';
@@ -35,10 +92,21 @@ function App() {
   const [state, dispatch] = useReducer(reducer, defaultState);
   const handleSubmit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
-    dispatch({
-      type: 'SHOW_LIST',
-      nextList: [...new Values(state.colorInput).all(state.shadeInput)],
-    });
+    if (
+      prev.prevColorInput !== state.colorInput ||
+      prev.prevShadeInput !== state.shadeInput
+    ) {
+      dispatch({
+        type: 'SHOW_LIST',
+        nextList: [...new Values(state.colorInput).all(state.shadeInput)],
+      });
+      notify();
+    } else {
+      notify('No change in inputs 🤔', false);
+    }
+
+    prev.prevColorInput = state.colorInput;
+    prev.prevShadeInput = state.shadeInput;
   };
 
   const handleRandomClick = (): void => {
@@ -52,6 +120,7 @@ function App() {
       type: 'SHOW_LIST',
       nextList: [...new Values(randomColor).all(state.shadeInput)],
     });
+    notify('Random');
   };
 
   const checkShade = (val: any): number => {
@@ -74,7 +143,9 @@ function App() {
     <>
       <section className='container'>
         <form onSubmit={handleSubmit}>
-          <h3>Color Generator</h3>
+          <h3>
+            Color Generator <img src='./src/assets/favicon-32x32.png' alt='' />
+          </h3>
           <div className='search-form'>
             <div className='color-search'>
               <label htmlFor='color-input'>Color : </label>
@@ -91,7 +162,8 @@ function App() {
                     val: e.target.value,
                   });
                 }}
-              />
+              />{' '}
+              <span className='color-text'>{state.colorInput}</span>
             </div>
             <div className='shade-count-div'>
               <label htmlFor='shade-input'>Shades : </label>
@@ -123,10 +195,12 @@ function App() {
       </section>
 
       <section className='colors'>
-        {state.colorsList.map((color: singleColorType) => (
-          <SingleColor color={color} />
+        {state.colorsList.map((color: singleColorType, i: number) => (
+          <SingleColor key={i} color={color} />
         ))}
       </section>
+
+      <Toaster />
     </>
   );
 }
