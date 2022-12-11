@@ -384,9 +384,10 @@ Color Generator
   box-shadow: var(--shadow-3);
 }
 
-/* .submit-btn {
+.submit-btn {
   margin-left: auto;
-} */
+  margin-right: auto;
+}
 
 .colors {
   display: grid;
