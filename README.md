@@ -2,6 +2,8 @@
  
 ⚡ Generate shades for your respective input color and copy colors to your clipboard.
 
+## [Live Link](https://react-color-generator-ochre.vercel.app/)
+
 ## DEMO ▶: 
 https://user-images.githubusercontent.com/113245457/206903547-75cdd70a-a3a1-4bbc-98b4-68dd9553ed39.mp4
 
